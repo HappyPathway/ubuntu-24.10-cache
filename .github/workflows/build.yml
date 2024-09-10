@@ -9,6 +9,10 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
+    env:
+      AWS_SECRET_ACCESS_KEY: ${{ vars.AWS_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
+      
     container:
       image: ubuntu:${{ vars.ubuntu_version }}
     permissions:
@@ -31,10 +35,7 @@ jobs:
           python-version: '3.11'
 
       - run: apt-get install -y python-is-python3
-      - run: |
-          curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-          unzip awscli-bundle.zip
-          sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+      - run: sudo snap install aws-cli
 
       - run: |
           which pip3 || curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
