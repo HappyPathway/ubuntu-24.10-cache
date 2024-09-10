@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:${{ vars.ubuntu_version }}
-      volumes:
-        - ${{ github.workspace }}/apt:/var/cache/apt/archives
     permissions:
       pull-requests: write
       contents: write
