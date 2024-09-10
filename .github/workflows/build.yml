@@ -23,15 +23,22 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - run: |
-          which pip3 || curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          which pip3 || python3 get-pip.py --user
           apt-get update
-          apt-get install -y lsb-release
+          apt-get install -y lsb-release curl
           
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-        
+
+      - run: |
+          curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+          unzip awscli-bundle.zip
+          sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+      - run: |
+          which pip3 || curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          which pip3 || python3 get-pip.py --user
+          
       - run: pip install --user ansible
       
       - name: Run Ansible Playbook
