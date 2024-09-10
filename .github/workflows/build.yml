@@ -30,6 +30,7 @@ jobs:
         with:
           python-version: '3.11'
 
+      - run: apt-get install -y python-is-python3
       - run: |
           curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
           unzip awscli-bundle.zip
