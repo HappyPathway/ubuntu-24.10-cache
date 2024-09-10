@@ -35,7 +35,7 @@ jobs:
           python-version: '3.11'
 
       - run: apt-get install -y python-is-python3
-      - run: sudo apt install awscli
+      - run: sudo apt install -y awscli
 
       - run: |
           which pip3 || curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
