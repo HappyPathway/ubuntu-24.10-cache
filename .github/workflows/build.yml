@@ -24,7 +24,7 @@ jobs:
 
       - run: |
           apt-get update
-          apt-get install -y lsb-release curl unzip sudo
+          apt-get install -y lsb-release curl unzip sudo python3.12-venv
           
       - uses: actions/setup-python@v5
         with:
