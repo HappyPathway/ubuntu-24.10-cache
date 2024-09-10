@@ -24,18 +24,16 @@ jobs:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GH_TOKEN }}
 
-      - name: install ansible
-        run: apt-get install -y ansible
-
-      - name: Setup Packer
-        uses: hashicorp/setup-packer@main
-        id: setup
+      - uses: actions/setup-python@v5
         with:
-          version: ${{ vars.packer_version }}
-
+          python-version: '3.11'
+          cache: 'pip' # caching pip dependencies
+        
+      - run: pip install --user ansible
+      
       - name: Run Ansible Playbook
         id: build
-        run: ansible-playbook apt-cache.yml
+        run: $(python -m site --user-base)/bin/ansible-playbook apt-cache.yml
 
       - name: upload packages
         run: aws s3 cp /var/cache/apt/archives s3://${{ vars.apt_cache_bucket }}/${{ vars.apt_cache_key }} --recursive
