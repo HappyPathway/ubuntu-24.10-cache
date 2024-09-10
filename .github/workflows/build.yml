@@ -1,0 +1,41 @@
+name: "Build: Image Pipeline"
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:${{ vars.ubuntu_version }}
+      volumes:
+        - ${{ github.workspace }}/apt:/var/cache/apt/archives
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Checkout Local Source Code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: install ansible
+        run: apt-get install -y ansible
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{ vars.packer_version }}
+
+      - name: Run Ansible Playbook
+        id: build
+        run: ansible-playbook apt-cache.yml
+
+      - name: upload packages
+        run: aws s3 cp /var/cache/apt/archives s3://${{ vars.apt_cache_bucket }}/${{ vars.apt_cache_key }} --recursive

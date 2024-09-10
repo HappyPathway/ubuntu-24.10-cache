@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: false
+
+  tasks:
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - software-properties-common
+          - build-essential
+          - bison
+          - curl
+          - ca-certificates
+          - dnsutils
+          - git
+          - jq
+          - libffi-dev
+          - libgdbm-dev
+          - libreadline-dev
+          - libssl-dev
+          - libunwind8
+          - libyaml-dev
+          - locales
+          - python3-pip
+          - rsync
+          - supervisor
+          - sudo
+          - time
+          - tzdata
+          - unzip
+          - upx
+          - wget
+          - zip
+          - zlib1g-dev
+          - zstd
+        state: present
+        install_recommends: no
